@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xuecheng.content.mapper.CourseCategoryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xuecheng.content.model.po.CourseCategory">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="label" property="label" />
+        <result column="parentid" property="parentid" />
+        <result column="is_show" property="isShow" />
+        <result column="orderby" property="orderby" />
+        <result column="is_leaf" property="isLeaf" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, label, parentid, is_show, orderby, is_leaf
+    </sql>
+
+    <select id="selectTreeNodes" resultType="com.xuecheng.content.model.dto.CourseCategoryTreeDto" parameterType="string">
+        with recursive t1 as (
+            select p.* from course_category p where p.id= #{id}
+            union all
+            select t.* from course_category t inner join t1 on t1.id = t.parentid
+        )
+        select * from t1 order by t1.id, t1.orderby
+    </select>
+
+
+</mapper>

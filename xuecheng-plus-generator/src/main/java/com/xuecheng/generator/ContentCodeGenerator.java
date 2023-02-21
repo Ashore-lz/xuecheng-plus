@@ -33,7 +33,7 @@ public class ContentCodeGenerator {
 			 "course_teacher",
 //			 "course_publish",
 //			 "course_publish_pre"
-//			"course_category"
+			"course_category"
 	};
 
 	// TODO 默认生成entity，需要生成DTO修改此变量
