@@ -34,3 +34,7 @@ Content-Type: application/json
 "description": "",
 "objectives": ""
 }
+
+### 查询某个课程的课程计划
+GET {{content_host}}/content/teachplan/117/tree-nodes
+Content-Type: application/json
