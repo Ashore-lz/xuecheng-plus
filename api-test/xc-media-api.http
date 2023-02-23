@@ -3,7 +3,7 @@ POST {{media_host}}/media/upload/coursefile
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
-Content-Disposition: form-data; name="filedata"; filename="hh.jpg"
+Content-Disposition: form-data; name="filedata"; filename="ww.jpg"
 Content-Type: application/octet-stream
 
-< d:/img/hh.jpg
+< d:/img/ww.jpg
