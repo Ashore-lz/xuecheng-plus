@@ -13,7 +13,7 @@
         <result column="bucket" property="bucket" />
         <result column="file_id" property="fileId" />
         <result column="url" property="url" />
-        <result column="timelength" property="timelength" />
+<!--        <result column="timelength" property="timelength" />-->
         <result column="username" property="username" />
         <result column="create_date" property="createDate" />
         <result column="change_date" property="changeDate" />
@@ -25,7 +25,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, company_id, company_name, filename, file_type, tags, bucket, file_id, url, timelength, username, create_date, change_date, status, remark, audit_status, audit_mind
+        id, company_id, company_name, filename, file_type, tags, bucket, file_id, url, username, create_date, change_date, status, remark, audit_status, audit_mind
     </sql>
 
 </mapper>

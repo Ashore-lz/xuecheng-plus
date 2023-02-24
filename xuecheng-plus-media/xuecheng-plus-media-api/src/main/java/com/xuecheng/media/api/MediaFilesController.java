@@ -28,7 +28,6 @@ public class MediaFilesController {
     @Autowired
     MediaFileService mediaFileService;
 
-
     @ApiOperation("媒资列表查询接口")
     @PostMapping("/files")
     public PageResult<MediaFiles> list(PageParams pageParams, @RequestBody QueryMediaParamsDto queryMediaParamsDto) {

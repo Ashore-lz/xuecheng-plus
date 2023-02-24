@@ -64,7 +64,7 @@ public class MediaFiles implements Serializable {
      */
     private String url;
 
-    private String timelength;
+    //private String timelength;
 
     /**
      * 上传人
