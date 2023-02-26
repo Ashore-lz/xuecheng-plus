@@ -24,6 +24,9 @@ spring:
           - data-id: logging-${spring.profiles.active}.yaml
             group: xuecheng-plus-common
             refrech: true
+          - data-id: freemarker-config-${spring.profiles.active}.yaml
+            group: xuecheng-plus-common
+            refrech: true
   profiles:
     active: dev
 
