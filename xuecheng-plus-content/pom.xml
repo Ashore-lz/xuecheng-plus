@@ -6,24 +6,15 @@
         <groupId>com.xuecheng</groupId>
         <artifactId>xuecheng-plus-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../xuecheng-plus-parent</relativePath> <!-- lookup parent from repository -->
+        <relativePath>../xuecheng-plus-parent</relativePath>
     </parent>
-
     <artifactId>xuecheng-plus-content</artifactId>
- <packaging>pom</packaging>
+    <packaging>pom</packaging>
+
     <modules>
         <module>xuecheng-plus-content-api</module>
         <module>xuecheng-plus-content-model</module>
         <module>xuecheng-plus-content-service</module>
     </modules>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.xuecheng</groupId>
-            <artifactId>xuecheng-plus-base</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-    </dependencies>
 
 </project>

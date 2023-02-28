@@ -4,11 +4,13 @@ import com.xuecheng.content.model.dto.CourseCategoryTreeDto;
 
 import java.util.List;
 
+/**
+ * @description 课程分类管理的接口
+ * @author Mr.M
+ * @date 2022/10/8 15:05
+ * @version 1.0
+ */
 public interface CourseCategoryService {
-    /**
-     * 课程分类树形结构查询
-     *
-     * @return
-     */
-    public List<CourseCategoryTreeDto> queryTreeNodes(String id);
+
+ public List<CourseCategoryTreeDto> queryTreeNodes();
 }

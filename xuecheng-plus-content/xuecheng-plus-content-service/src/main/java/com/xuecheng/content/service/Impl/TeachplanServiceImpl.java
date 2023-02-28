@@ -10,6 +10,7 @@ import com.xuecheng.content.model.dto.TeachplanDto;
 import com.xuecheng.content.model.po.Teachplan;
 import com.xuecheng.content.model.po.TeachplanMedia;
 import com.xuecheng.content.service.TeachplanService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * @author Mr.M
+ * @version 1.0
+ * @description TODO
+ * @date 2022/10/10 14:51
+ */
+@Slf4j
 @Service
 public class TeachplanServiceImpl implements TeachplanService {
 
@@ -32,46 +40,51 @@ public class TeachplanServiceImpl implements TeachplanService {
         return teachplanMapper.selectTreeNodes(courseId);
     }
 
-    @Transactional
+    //新增、修改
     @Override
-    public void saveTeachplan(SaveTeachplanDto teachplanDto) {
-        //课程计划id
-        Long id = teachplanDto.getId();
+    public void saveTeachplan(SaveTeachplanDto dto) {
 
-        //修改课程计划
-        if(id!=null){
-            Teachplan teachplan = teachplanMapper.selectById(id);
-            BeanUtils.copyProperties(teachplanDto,teachplan);
-            teachplanMapper.updateById(teachplan);
+        Long id = dto.getId();
+
+        Teachplan teachplan = teachplanMapper.selectById(id);
+
+        if(teachplan==null){
+            teachplan = new Teachplan();
+            BeanUtils.copyProperties(dto,teachplan);
+            //找到同级课程计划的数量
+            int count = getTeachplanCount(dto.getCourseId(), dto.getParentid());
+            //新课程计划的值
+            teachplan.setOrderby(count+1);
+
+            teachplanMapper.insert(teachplan);
+
         }else{
-            //取出同父同级别的课程计划数量
-            int count = getTeachplanCount(teachplanDto.getCourseId(), teachplanDto.getParentid());
-            Teachplan teachplanNew = new Teachplan();
+            BeanUtils.copyProperties(dto,teachplan);
+            //更新
+            teachplanMapper.updateById(teachplan);
 
-            //设置排序号
-            teachplanNew.setOrderby(count+1);
-            BeanUtils.copyProperties(teachplanDto,teachplanNew);
-            teachplanMapper.insert(teachplanNew);
         }
+
+
     }
 
+    @Transactional
     @Override
     public TeachplanMedia associationMedia(BindTeachplanMediaDto bindTeachplanMediaDto) {
         //教学计划的id
         Long teachplanId = bindTeachplanMediaDto.getTeachplanId();
         Teachplan teachplan = teachplanMapper.selectById(teachplanId);
-
         //约束校验
         //教学计划不存在无法绑定
         if(teachplan == null){
             XueChengPlusException.cast("教学计划不存在");
         }
-
         //只有二级目录才可以绑定视频
         Integer grade = teachplan.getGrade();
         if(grade != 2){
             XueChengPlusException.cast("只有二级目录才可以绑定视频");
         }
+
 
         //删除原来的绑定关系
         LambdaQueryWrapper<TeachplanMedia> lambdaQueryWrapper = new LambdaQueryWrapper<TeachplanMedia>().eq(TeachplanMedia::getTeachplanId, teachplanId);
@@ -88,17 +101,14 @@ public class TeachplanServiceImpl implements TeachplanService {
         return teachplanMedia;
     }
 
-    /**
-     * @description 获取最新的排序号
-     * @param courseId 课程id
-     * @param parentId 父课程计划id
-     * @return int 最新排序号
-     */
-    private int getTeachplanCount(long courseId,long parentId){
+    //计算机新课程计划的orderby 找到同级课程计划的数量 SELECT count(1) from teachplan where course_id=117 and parentid=268
+    public int getTeachplanCount(Long courseId,Long parentId){
+
         LambdaQueryWrapper<Teachplan> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Teachplan::getCourseId,courseId);
         queryWrapper.eq(Teachplan::getParentid,parentId);
         Integer count = teachplanMapper.selectCount(queryWrapper);
-        return count;
+        return count.intValue();
+
     }
 }

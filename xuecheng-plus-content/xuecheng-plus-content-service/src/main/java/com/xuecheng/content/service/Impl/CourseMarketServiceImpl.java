@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class CourseMarketServiceImpl extends ServiceImpl<CourseMarketMapper, CourseMarket> {
+public class CourseMarketServiceImpl extends ServiceImpl<CourseMarketMapper, CourseMarket>  {
 
 }

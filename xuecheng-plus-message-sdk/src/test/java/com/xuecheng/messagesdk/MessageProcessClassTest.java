@@ -19,12 +19,14 @@ public class MessageProcessClassTest {
     MessageProcessClass messageProcessClass;
 
     @Test
-    public void test() {
+    public void test() throws InterruptedException {
 
         System.out.println("开始执行-----》" + LocalDateTime.now());
-        messageProcessClass.process(0, 1, "test", 2, 10);
+        messageProcessClass.process(0, 1, "course_publish", 2, 10);
 
         System.out.println("结束执行-----》" + LocalDateTime.now());
+
+        Thread.sleep(90000000);
 
     }
 }

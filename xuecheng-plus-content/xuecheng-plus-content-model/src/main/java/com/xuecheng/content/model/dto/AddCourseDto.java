@@ -4,9 +4,11 @@ import com.xuecheng.base.exception.ValidationGroups;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
 /**
  * @description 添加课程dto
@@ -15,11 +17,13 @@ import javax.validation.constraints.Size;
  * @version 1.0
  */
 @Data
+@ToString
 @ApiModel(value="AddCourseDto", description="新增课程基本信息")
 public class AddCourseDto {
 
- @NotEmpty(message = "课程名称不能为空", groups = {ValidationGroups.Inster.class})
- @NotEmpty(message = "修改课程不能为空", groups = {ValidationGroups.Update.class})
+
+ @NotEmpty(message = "添加课程名称不能为空",groups={ValidationGroups.Inster.class})
+ @NotEmpty(message = "修改课程名称不能为空",groups={ValidationGroups.Update.class})
  @ApiModelProperty(value = "课程名称", required = true)
  private String name;
 

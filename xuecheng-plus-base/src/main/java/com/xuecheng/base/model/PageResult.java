@@ -1,10 +1,11 @@
 package com.xuecheng.base.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
-
+@NoArgsConstructor
 @Data
 public class PageResult<T> implements Serializable {
 

@@ -30,6 +30,7 @@ public class CoursePublishController {
         //查询数据
         CoursePreviewDto coursePreviewInfo = coursePublishService.getCoursePreviewInfo(courseId);
 
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("model", coursePreviewInfo);
         modelAndView.setViewName("course_template");

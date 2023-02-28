@@ -1,12 +1,16 @@
 package com.xuecheng.content.model.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-@Data
-@ApiModel(value="EditCourseDto", description="修改课程基本信息")
+/**
+ * @description TODO
+ * @author Mr.M
+ * @date 2022/10/10 10:54
+ * @version 1.0
+ */
+ @Data
 public class EditCourseDto extends AddCourseDto {
-   @ApiModelProperty(value = "课程名称", required = true)
-   private Long id;
+
+ //课程id
+ private Long id;
 }

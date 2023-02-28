@@ -18,14 +18,51 @@
         id, name, label, parentid, is_show, orderby, is_leaf
     </sql>
 
-    <select id="selectTreeNodes" resultType="com.xuecheng.content.model.dto.CourseCategoryTreeDto" parameterType="string">
-        with recursive t1 as (
-            select p.* from course_category p where p.id= #{id}
-            union all
-            select t.* from course_category t inner join t1 on t1.id = t.parentid
-        )
-        select * from t1 order by t1.id, t1.orderby
+    <resultMap id="selectTreeNodesMap" type="com.xuecheng.content.model.dto.CourseCategoryTreeDto">
+
+        <id column="one_id" property="id"></id>
+        <result column="one_name" property="name"></result>
+        <result column="one_label" property="label"></result>
+        <result column="one_orderby" property="orderby"></result>
+        <result column="one_parentid" property="parentid"></result>
+        <result column="one_is_leaf" property="isLeaf"></result>
+
+        <!--一对多映射,ofType对应了List中的类型-->
+        <collection property="childrenTreeNodes" ofType="com.xuecheng.content.model.dto.CourseCategoryTreeDto">
+            <id column="two_id" property="id"></id>
+            <result column="two_name" property="name"></result>
+            <result column="two_label" property="label"></result>
+            <result column="two_orderby" property="orderby"></result>
+            <result column="two_parentid" property="parentid"></result>
+            <result column="two_is_leaf" property="isLeaf"></result>
+        </collection>
+
+    </resultMap>
+
+    <select id="abc" resultType="com.xuecheng.content.model.po.CourseCategory">
+        select * from course_category where id=1
     </select>
 
+    <select id="selectTreeNodes" resultMap="selectTreeNodesMap">
+        SELECT
+            one.id one_id,
+            one.NAME one_name,
+            one.label one_label,
+            one.orderby one_orderby,
+            one.parentid one_parentid,
+            one.is_leaf one_is_leaf,
+            two.id two_id,
+            two.NAME two_name,
+            two.label two_label,
+            two.orderby two_orderby,
+            two.parentid two_parentid,
+            two.is_leaf two_is_leaf
+        FROM
+            course_category one
+                INNER JOIN course_category two ON one.id = two.parentid
+        where one.is_show = '1' and two.is_show='1' and one.parentid='1'
+        order by one.orderby,two.orderby
+
+    </select>
 
 </mapper>
