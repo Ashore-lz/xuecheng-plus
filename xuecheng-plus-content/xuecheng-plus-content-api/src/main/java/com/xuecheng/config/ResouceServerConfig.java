@@ -38,7 +38,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
  public void configure(HttpSecurity http) throws Exception {
   http.csrf().disable()
           .authorizeRequests()
-                .antMatchers("/r/**","/course/**").authenticated()//所有/r/**的请求必须认证通过
+//                .antMatchers("/r/**","/course/**").authenticated()//所有/r/**的请求必须认证通过
           .anyRequest().permitAll()
   ;
  }
