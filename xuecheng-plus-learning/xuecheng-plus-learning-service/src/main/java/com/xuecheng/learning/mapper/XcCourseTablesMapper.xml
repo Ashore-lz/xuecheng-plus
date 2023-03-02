@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xuecheng.learning.mapper.XcCourseTablesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xuecheng.learning.model.po.XcCourseTables">
+        <id column="id" property="id"/>
+        <result column="choose_course_id" property="chooseCourseId"/>
+        <result column="user_id" property="userId"/>
+        <result column="course_id" property="courseId"/>
+        <result column="company_id" property="companyId"/>
+        <result column="course_name" property="courseName"/>
+        <result column="course_type" property="courseType"/>
+        <result column="create_date" property="createDate"/>
+        <result column="validtime_start" property="validtimeStart"/>
+        <result column="validtime_end" property="validtimeEnd"/>
+        <result column="update_date" property="updateDate"/>
+        <result column="course_price" property="coursePrice"/>
+        <result column="remarks" property="remarks"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , choose_course_id, user_id, course_id,course_type, company_id, course_name,course_price, create_date, validtime_start,validtime_end, update_date, remarks
+    </sql>
+
+
+    <select id="myCourseTables"
+            resultType="com.xuecheng.learning.model.dto.MyCourseTableItemDto"
+            parameterType="com.xuecheng.learning.model.dto.MyCourseTableParams">
+
+        SELECT
+        t1.*,
+        t2.learn_date learnDate,
+        t2.learn_length learnLength,
+        t2.teachplan_id teachplanId,
+        t2.teachplan_name teachplanName,
+        IFNULL(t2.learn_date,t1.create_date) orderdate
+
+        FROM
+        xc_course_tables t1
+        LEFT JOIN xc_learn_record t2 ON t1.course_id = t2.course_id
+        AND t2.id =( SELECT id FROM xc_learn_record a WHERE a.course_id = t1.course_id ORDER BY a.learn_date DESC LIMIT 1 )
+        WHERE
+
+        t1.user_id = #{userId}
+
+        <if test="courseType !=null and courseType !=''">
+            and t1.course_type=#{courseType}
+        </if>
+        <if test='expiresType ==1'>
+            <![CDATA[ and DATEDIFF(t1.validtime_end,now())<30 ]]>
+
+        </if>
+        <if test='expiresType ==2'>
+            <![CDATA[ and DATEDIFF(t1.validtime_end,now())<1 ]]>
+        </if>
+        <if test='sortType ==1'>
+            order by orderdate desc
+        </if>
+        <if test='sortType ==2'>
+            ORDER BY t1.create_date desc
+        </if>
+        limit #{startIndex},#{size}
+
+    </select>
+    <select id="myCourseTablesCount"
+            resultType="int"
+            parameterType="com.xuecheng.learning.model.dto.MyCourseTableParams">
+
+        SELECT
+        count(1)
+        FROM
+        xc_course_tables t1
+        LEFT JOIN xc_learn_record t2 ON t1.course_id = t2.course_id
+         AND t2.id =( SELECT id FROM xc_learn_record a WHERE a.course_id = t1.course_id ORDER BY a.learn_date DESC LIMIT 1 )
+        WHERE
+
+        t1.user_id = #{userId}
+
+        <if test="courseType !=null and courseType !=''">
+            and t1.course_type=#{courseType}
+        </if>
+        <if test='expiresType ==1'>
+            <![CDATA[ and DATEDIFF(t1.validtime_end,now())<30 ]]>
+
+        </if>
+        <if test='expiresType ==2'>
+            <![CDATA[ and DATEDIFF(t1.validtime_end,now())<1 ]]>
+        </if>
+
+
+
+    </select>
+
+
+
+</mapper>

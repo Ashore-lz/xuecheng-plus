@@ -1,10 +1,13 @@
 package com.xuecheng.ucenter.service.Impl.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.xuecheng.ucenter.mapper.XcMenuMapper;
 import com.xuecheng.ucenter.mapper.XcUserMapper;
 import com.xuecheng.ucenter.model.dto.AuthParamsDto;
 import com.xuecheng.ucenter.model.dto.XcUserExt;
-import com.xuecheng.ucenter.service.Impl.AuthService;import lombok.extern.slf4j.Slf4j;
+import com.xuecheng.ucenter.model.po.XcMenu;
+import com.xuecheng.ucenter.service.Impl.AuthService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.userdetails.User;
@@ -12,6 +15,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Mr.M
@@ -28,6 +34,9 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Autowired
     ApplicationContext applicationContext;
+
+    @Autowired
+    XcMenuMapper menuMapper;
 
     //传入的是AuthParamsDto的json串
     @Override
@@ -59,8 +68,20 @@ public class UserServiceImpl implements UserDetailsService {
      */
     public UserDetails getUserPrincipal(XcUserExt user){
 
-        //用户权限,如果不加报Cannot pass a null GrantedAuthority collection
-        String[] authorities= {"test"};
+        //权限列表，存放的用户权限
+        List<String> permissionList = new ArrayList<>();
+
+        //根据用户id查询数据库中他的权限
+        List<XcMenu> xcMenus = menuMapper.selectPermissionByUserId(user.getId());
+        xcMenus.forEach(menu->{
+            permissionList.add(menu.getCode());
+        });
+        if(permissionList.size()==0){
+            //用户权限,如果不加报Cannot pass a null GrantedAuthority collection
+            permissionList.add("test");
+        }
+
+        String[] authorities= permissionList.toArray(new String[0]);
         //原来存的是账号，现在扩展为用户的全部信息(密码不要放)
         user.setPassword(null);
         String jsonString = JSON.toJSONString(user);

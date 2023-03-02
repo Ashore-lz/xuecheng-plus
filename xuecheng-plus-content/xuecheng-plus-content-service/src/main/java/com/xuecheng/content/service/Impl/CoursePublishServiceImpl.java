@@ -257,6 +257,12 @@ public class CoursePublishServiceImpl implements CoursePublishService {
         return result;
     }
 
+    @Override
+    public CoursePublish getCoursePublish(Long courseId) {
+        CoursePublish coursePublish = coursePublishMapper.selectById(courseId);
+        return coursePublish;
+    }
+
 
     //保存课程发布信息
     private void saveCoursePublish(Long courseId) {
