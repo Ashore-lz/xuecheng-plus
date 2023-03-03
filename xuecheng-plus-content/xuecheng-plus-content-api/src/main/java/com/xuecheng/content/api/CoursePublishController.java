@@ -1,9 +1,13 @@
 package com.xuecheng.content.api;
 
+import com.alibaba.fastjson.JSON;
+import com.xuecheng.content.model.dto.CourseBaseInfoDto;
 import com.xuecheng.content.model.dto.CoursePreviewDto;
+import com.xuecheng.content.model.dto.TeachplanDto;
 import com.xuecheng.content.model.po.CoursePublish;
 import com.xuecheng.content.service.CoursePublishService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * @author Mr.M
@@ -64,4 +70,28 @@ public class CoursePublishController {
         return coursePublish;
     }
 
+    @ApiOperation("获取课程发布信息")
+    @ResponseBody
+    @GetMapping("/course/whole/{courseId}")
+    public CoursePreviewDto getCoursePublish(@PathVariable("courseId") Long courseId){
+        //查询课程发布信息
+        CoursePublish coursePublish = coursePublishService.getCoursePublish(courseId);
+        if(coursePublish==null){
+            return new CoursePreviewDto();
+        }
+
+        //封装基本信息和营销信息
+        CourseBaseInfoDto courseBase= new CourseBaseInfoDto();
+        BeanUtils.copyProperties(coursePublish, courseBase);
+
+        String teachplan = coursePublish.getTeachplan();
+        List<TeachplanDto> teachplanDtos = JSON.parseArray(teachplan, TeachplanDto.class);
+
+        CoursePreviewDto previewDto = new CoursePreviewDto();
+        previewDto.setTeachplans(teachplanDtos);
+        previewDto.setCourseBase(courseBase);
+
+        return previewDto;
+
+    }
 }

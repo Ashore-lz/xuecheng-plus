@@ -32,4 +32,6 @@ public interface MyCourseTablesService {
 
     public PageResult<MyCourseTableItemDto> mycourestabls(MyCourseTableParams params);
 
+    public XcCourseTables addCourseTabls(XcChooseCourse xcChooseCourse);
+
 }

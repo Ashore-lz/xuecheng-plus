@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: orders-service
+  cloud:
+    nacos:
+      server-addr: 192.168.101.65:8848
+      discovery:
+        namespace: dev148
+        group: xuecheng-plus-project
+      config:
+        namespace: dev148
+        group: xuecheng-plus-project
+        file-extension: yaml
+        refresh-enabled: true
+        shared-configs:
+          - data-id: logging-${spring.profiles.active}.yaml
+            group: xuecheng-plus-common
+            refresh: true
+          - data-id: rabbitmq-${spring.profiles.active}.yaml
+            group: xuecheng-plus-common
+            refresh: true
+  #profiles默认为dev
+  profiles:
+    active: dev
+
+
+
