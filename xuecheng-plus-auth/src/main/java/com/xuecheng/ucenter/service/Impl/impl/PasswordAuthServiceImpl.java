@@ -8,6 +8,7 @@ import com.xuecheng.ucenter.model.dto.XcUserExt;
 import com.xuecheng.ucenter.model.po.XcUser;
 import com.xuecheng.ucenter.service.Impl.AuthService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,20 +36,19 @@ public class PasswordAuthServiceImpl implements AuthService {
     //实现账号和密码认证
     @Override
     public XcUserExt execute(AuthParamsDto authParamsDto) {
-
         //得到验证码
-//        String checkcode = authParamsDto.getCheckcode();
-//        String checkcodekey = authParamsDto.getCheckcodekey();
-//        if(StringUtils.isBlank(checkcodekey) || StringUtils.isBlank(checkcode)){
-//            throw new RuntimeException("验证码为空");
-//
-//        }
-//
-//        //校验验证码,请求验证码服务进行校验
-//        Boolean result = checkCodeClient.verify(checkcodekey, checkcode);
-//        if(result==null || !result){
-//            throw new RuntimeException("验证码错误");
-//        }
+        String checkcode = authParamsDto.getCheckcode();
+        String checkcodekey = authParamsDto.getCheckcodekey();
+        if(StringUtils.isBlank(checkcodekey) || StringUtils.isBlank(checkcode)){
+            throw new RuntimeException("验证码为空");
+
+        }
+
+        //校验验证码,请求验证码服务进行校验
+        Boolean result = checkCodeClient.verify(checkcodekey, checkcode);
+        if(result==null || !result){
+            throw new RuntimeException("验证码错误");
+        }
 
         //账号
         String username = authParamsDto.getUsername();
